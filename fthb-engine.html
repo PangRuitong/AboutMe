@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./images/2.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="./CSS/personal-info-main.css">
+    <link rel="stylesheet" href="./CSS/personal-info-animate.css">
+    <link rel="stylesheet" href="./CSS/animate.min.css">
+    <link href="./CSS/aos.css" rel="stylesheet">
+    <title>FTHB AI Research Engine &mdash; Max Pang</title>
+    <style>
+        /* ── All rules scoped to .fthb-page — nothing here can bleed to index.html ── */
+
+        /* Nav */
+        .fthb-page .fthb-nav {
+            position: sticky;
+            top: 0;
+            z-index: 10000;
+            background: rgba(27, 30, 40, 0.97) !important;
+        }
+        .fthb-page .fthb-nav .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .fthb-page .fthb-nav .navbar-collapse li {
+            font-weight: 700;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .fthb-page .fthb-nav .navbar-collapse li:hover {
+            background: rgb(26, 145, 65);
+            transition: 0.55s;
+        }
+
+        /* Hero */
+        .fthb-page .fthb-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2B2F3E 60%, #1e2130 100%);
+            padding: 72px 0 56px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.88);
+        }
+        .fthb-page .fthb-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        .fthb-page .fthb-hero .fthb-tagline {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.72);
+            max-width: 680px;
+            margin: 0 auto 28px;
+            line-height: 1.65;
+        }
+        .fthb-page .fthb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 8px;
+            padding: 14px 28px;
+        }
+        .fthb-page .fthb-badge .fas-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.45);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .fthb-page .fthb-badge .fas-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e9c309;
+            line-height: 1;
+        }
+        .fthb-page .fthb-badge-divider {
+            width: 1px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.13);
+        }
+        .fthb-page .fthb-badge .fas-decisions {
+            text-align: left;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Shared section helpers */
+        .fthb-page .fthb-section {
+            padding: 56px 0 60px;
+        }
+        .fthb-page .fthb-section-dark {
+            background: #2B2F3E;
+        }
+        .fthb-page .fthb-section-darker {
+            background: #1e2130;
+        }
+        .fthb-page .fthb-section-light {
+            background: #f4f1eb;
+        }
+        .fthb-page .fthb-section-dark .section-title,
+        .fthb-page .fthb-section-darker .section-title {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .fthb-page .fthb-section-dark p,
+        .fthb-page .fthb-section-darker p {
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+        }
+        .fthb-page .fthb-section-light .section-title {
+            color: #2B2F3E;
+        }
+
+        /* Baseline card */
+        .fthb-page .fthb-baseline-card {
+            background: #494A5F;
+            border-left: 4px solid #cd7070;
+            border-radius: 4px;
+            padding: 22px 26px;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.75;
+            box-shadow: -1px 5px 25px 0px rgba(0, 0, 0, 0.25);
+            font-size: 0.97rem;
+        }
+
+        /* Pipeline */
+        .fthb-page .fthb-pipeline-wrap {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        .fthb-page .fthb-pipeline {
+            display: flex;
+            align-items: center;
+            min-width: 700px;
+            padding: 16px 0;
+        }
+        .fthb-page .fthb-pipe-step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .fthb-page .fthb-pipe-step:last-child {
+            flex: none;
+        }
+        .fthb-page .fthb-pipe-node {
+            flex-shrink: 0;
+            background: #494A5F;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 14px 12px;
+            text-align: center;
+            min-width: 96px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .fthb-page .fthb-pipe-node.fthb-pipe-final {
+            border-color: #e9c309;
+            background: rgba(233, 195, 9, 0.1);
+        }
+        .fthb-page .fthb-pipe-node .pipe-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.55);
+        }
+        .fthb-page .fthb-pipe-node.fthb-pipe-final .pipe-icon {
+            background: rgba(233, 195, 9, 0.2);
+            color: #e9c309;
+        }
+        .fthb-page .fthb-pipe-node .pipe-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .fthb-page .fthb-pipe-node.fthb-pipe-final .pipe-label {
+            color: #e9c309;
+        }
+        .fthb-page .fthb-pipe-node .pipe-sub {
+            font-size: 0.63rem;
+            color: rgba(255, 255, 255, 0.42);
+            display: block;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+        .fthb-page .fthb-pipe-node.fthb-pipe-final .pipe-sub {
+            color: rgba(233, 195, 9, 0.55);
+        }
+        .fthb-page .fthb-pipe-arrow {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, rgba(233, 195, 9, 0.25), rgba(233, 195, 9, 0.55));
+            position: relative;
+            min-width: 16px;
+        }
+        .fthb-page .fthb-pipe-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid rgba(233, 195, 9, 0.55);
+        }
+        .fthb-page .fthb-pipeline-caveat {
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.42);
+            font-style: italic;
+            margin-top: 18px;
+        }
+
+        /* Build story timeline */
+        .fthb-page .fthb-timeline {
+            position: relative;
+            padding: 10px 0 10px;
+        }
+        .fthb-page .fthb-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #434343;
+            transform: translateX(-50%);
+        }
+        .fthb-page .fthb-tl-item {
+            display: flex;
+            margin-bottom: 48px;
+            position: relative;
+            align-items: flex-start;
+        }
+        .fthb-page .fthb-tl-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        .fthb-page .fthb-tl-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        .fthb-page .fthb-tl-content {
+            width: calc(50% - 28px);
+            background: white;
+            border-radius: 6px;
+            padding: 20px 22px;
+            box-shadow: -1px 5px 25px 0px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease-out;
+        }
+        .fthb-page .fthb-tl-content:hover {
+            transform: scale(1.02);
+        }
+        .fthb-page .fthb-tl-item:nth-child(odd) .fthb-tl-content {
+            margin-right: 28px;
+        }
+        .fthb-page .fthb-tl-item:nth-child(even) .fthb-tl-content {
+            margin-left: 28px;
+        }
+        .fthb-page .fthb-tl-dot {
+            position: absolute;
+            left: 50%;
+            top: 16px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #cd7070;
+            border: 3px solid #f4f1eb;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        .fthb-page .fthb-tl-ch {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .fthb-page .fthb-tl-title {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2B2F3E;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .fthb-page .fthb-tl-content p {
+            font-size: 0.88rem;
+            color: #444;
+            line-height: 1.65;
+            margin-bottom: 6px;
+        }
+        .fthb-page .fthb-tl-content ul {
+            padding-left: 18px;
+            margin: 8px 0 6px;
+        }
+        .fthb-page .fthb-tl-content li {
+            font-size: 0.88rem;
+            color: #444;
+            line-height: 1.65;
+            margin-bottom: 4px;
+        }
+        .fthb-page .fthb-tl-content code {
+            font-size: 0.82rem;
+            background: #f0f0f0;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: #555;
+        }
+        .fthb-page .fthb-tl-why {
+            font-size: 0.83rem;
+            font-style: italic;
+            color: #067927;
+            font-weight: 600;
+            margin: 12px 0 6px;
+        }
+        .fthb-page .fthb-tl-honest {
+            font-size: 0.8rem;
+            color: #888;
+            border-left: 3px solid #e0e0e0;
+            padding-left: 10px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* Hero chapters (1 & 3) get gold treatment */
+        .fthb-page .fthb-tl-hero .fthb-tl-dot {
+            width: 18px;
+            height: 18px;
+            background: #e9c309;
+            border-color: #f4f1eb;
+            box-shadow: 0 0 0 3px rgba(233, 195, 9, 0.22);
+            top: 14px;
+        }
+        .fthb-page .fthb-tl-hero .fthb-tl-content {
+            border-top: 3px solid #e9c309;
+        }
+        .fthb-page .fthb-tl-hero .fthb-tl-ch {
+            color: #a07e00;
+        }
+        .fthb-page .fthb-tl-hero .fthb-tl-title {
+            font-size: 1.02rem;
+        }
+
+        /* Current frontier */
+        .fthb-page .fthb-frontier-card {
+            background: #494A5F;
+            border-radius: 6px;
+            padding: 26px 28px;
+            box-shadow: -1px 5px 25px 0px rgba(0, 0, 0, 0.25);
+        }
+        .fthb-page .fthb-frontier-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 14px;
+        }
+        .fthb-page .fthb-frontier-card p {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.68);
+            line-height: 1.65;
+        }
+        .fthb-page .fthb-frontier-card ul {
+            padding-left: 18px;
+            margin: 8px 0;
+        }
+        .fthb-page .fthb-frontier-card li {
+            font-size: 0.88rem;
+            color: #D5D6E2;
+            line-height: 1.65;
+            margin-bottom: 5px;
+        }
+        .fthb-page .fthb-frontier-card code {
+            font-size: 0.82rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: rgba(255, 255, 255, 0.72);
+        }
+        .fthb-page .fthb-live-tag {
+            display: inline-block;
+            background: rgba(6, 121, 39, 0.2);
+            border: 1px solid #067927;
+            color: #4caf50;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .fthb-page .fthb-open-tag {
+            display: inline-block;
+            background: rgba(205, 112, 112, 0.15);
+            border: 1px solid #cd7070;
+            color: #cd7070;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .fthb-page .fthb-frontier-why {
+            margin-top: 18px;
+            font-size: 0.83rem;
+            color: rgba(255, 255, 255, 0.48);
+            font-style: italic;
+            border-left: 3px solid rgba(233, 195, 9, 0.3);
+            padding-left: 12px;
+            line-height: 1.65;
+        }
+
+        /* Lessons */
+        .fthb-page .fthb-lesson {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 26px;
+            align-items: flex-start;
+        }
+        .fthb-page .fthb-lesson-num {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #067927;
+            color: white;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+        .fthb-page .fthb-lesson-body {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Footer CTA */
+        .fthb-page .fthb-cta {
+            background: #1a1a2e;
+            padding: 52px 0;
+            text-align: center;
+        }
+        .fthb-page .fthb-cta p {
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 22px;
+            font-size: 0.95rem;
+        }
+        /* Mimics site's hvr-bounce-to-right but with display:inline-block */
+        .fthb-page .fthb-btn {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            padding: 10px 22px;
+            font-size: 17px;
+            font-weight: 400;
+            color: #e3d9d9;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 0;
+            background: transparent;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: color 0.5s;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        .fthb-page .fthb-btn::before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #067927;
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            transition: transform 0.5s cubic-bezier(0.52, 1.64, 0.37, 0.66);
+        }
+        .fthb-page .fthb-btn:hover,
+        .fthb-page .fthb-btn:focus {
+            color: white;
+            text-decoration: none;
+            border-color: #067927;
+        }
+        .fthb-page .fthb-btn:hover::before,
+        .fthb-page .fthb-btn:focus::before {
+            transform: scaleX(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .fthb-page .fthb-timeline::before {
+                left: 18px;
+                transform: none;
+            }
+            .fthb-page .fthb-tl-item,
+            .fthb-page .fthb-tl-item:nth-child(odd),
+            .fthb-page .fthb-tl-item:nth-child(even) {
+                flex-direction: row;
+            }
+            .fthb-page .fthb-tl-content {
+                width: calc(100% - 46px);
+                margin-left: 46px !important;
+                margin-right: 0 !important;
+            }
+            .fthb-page .fthb-tl-dot {
+                left: 18px;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fthb-page .fthb-hero h1 { font-size: 1.75rem; }
+            .fthb-page .fthb-hero .fthb-tagline { font-size: 0.97rem; }
+            .fthb-page .fthb-badge {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            .fthb-page .fthb-badge-divider { width: 40px; height: 1px; }
+            .fthb-page .fthb-badge .fas-decisions { text-align: center; }
+        }
+    </style>
+</head>
+
+<body class="fthb-page">
+
+    <!-- NAV -->
+    <nav class="navbar navbar-expand-md navbar-dark fthb-nav">
+        <div class="container">
+            <a class="navbar-brand" href="./index.html">Max Pang</a>
+            <button class="navbar-toggler" type="button"
+                    data-toggle="collapse" data-target="#fthbNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="fthbNav">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="./index.html#about">Basic Info</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./index.html#skill">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./index.html#project">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./index.html#work">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./index.html#others">Road Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./index.html#contact">Contact Me</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="fthb-hero">
+        <div class="container">
+            <h1>FTHB AI Research Engine</h1>
+            <p class="fthb-tagline">
+                A Python/FastAPI pipeline that screens fixed-income securities against
+                Biblical Responsible Investing (BRI) criteria &mdash; not generic ESG.
+                Output is a <strong>FAS score</strong> and a human-reviewable decision.
+            </p>
+            <div class="fthb-badge">
+                <div>
+                    <span class="fas-label">FAS Score</span>
+                    <span class="fas-score">0 &ndash; 100</span>
+                </div>
+                <div class="fthb-badge-divider"></div>
+                <div class="fas-decisions">
+                    Insufficient Evidence &bull; Pass &bull; Review<br>
+                    Exclude &bull; Aligned &bull; Exemplary
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHERE IT STARTED -->
+    <section class="fthb-section fthb-section-dark">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-offset="10">Where It Started</h2>
+            <div data-aos="fade-up" data-aos-offset="10">
+                <div class="fthb-baseline-card">
+                    It started as a thin wrapper &mdash; a few API calls to Perplexity and Gemini that
+                    took whatever came back at face value. No reproducibility, no source-quality
+                    rules, no audit trail. Most of the engineering below is the story of turning
+                    that into something an investor could actually trust.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="fthb-section fthb-section-darker">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-offset="10">How It Works</h2>
+            <div data-aos="fade-up" data-aos-offset="10">
+                <div class="fthb-pipeline-wrap">
+                    <div class="fthb-pipeline">
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node">
+                                <div class="pipe-icon">IN</div>
+                                <span class="pipe-label">Input</span>
+                                <span class="pipe-sub">Security</span>
+                            </div>
+                            <div class="fthb-pipe-arrow"></div>
+                        </div>
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node">
+                                <div class="pipe-icon">PX</div>
+                                <span class="pipe-label">Perplexity</span>
+                                <span class="pipe-sub">5&times; per direction<br>one per pillar</span>
+                            </div>
+                            <div class="fthb-pipe-arrow"></div>
+                        </div>
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node">
+                                <div class="pipe-icon">GM</div>
+                                <span class="pipe-label">Gemini</span>
+                                <span class="pipe-sub">Structured<br>findings</span>
+                            </div>
+                            <div class="fthb-pipe-arrow"></div>
+                        </div>
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node">
+                                <div class="pipe-icon">VL</div>
+                                <span class="pipe-label">Validator</span>
+                                <span class="pipe-sub">Source<br>doctrine</span>
+                            </div>
+                            <div class="fthb-pipe-arrow"></div>
+                        </div>
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node">
+                                <div class="pipe-icon">SC</div>
+                                <span class="pipe-label">Scoring</span>
+                                <span class="pipe-sub">FAS 0&ndash;100</span>
+                            </div>
+                            <div class="fthb-pipe-arrow"></div>
+                        </div>
+
+                        <div class="fthb-pipe-step">
+                            <div class="fthb-pipe-node fthb-pipe-final">
+                                <div class="pipe-icon">HR</div>
+                                <span class="pipe-label">Human Review</span>
+                                <span class="pipe-sub">Final call</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <p class="fthb-pipeline-caveat">
+                    Human review is the final step &mdash; the AI surfaces evidence, it doesn't make the call.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BUILD STORY -->
+    <section class="fthb-section fthb-section-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-offset="10">The Build Story</h2>
+            <div class="fthb-timeline">
+
+                <!-- Chapter 1 — HERO -->
+                <div class="fthb-tl-item fthb-tl-hero" data-aos="fade-up" data-aos-offset="10">
+                    <div class="fthb-tl-dot"></div>
+                    <div class="fthb-tl-content">
+                        <div class="fthb-tl-ch">Chapter 1</div>
+                        <div class="fthb-tl-title">Make it reproducible before making it correct.</div>
+                        <p><strong>Problem:</strong> The same input gave different outputs &mdash; different enriched descriptions, different source sets, occasionally a flipped Pass&rarr;Review decision &mdash; and the replay tooling itself couldn't be trusted.</p>
+                        <ul>
+                            <li>Proved the fill step ran at temperature&nbsp;0, isolating Perplexity's live web search as the drift source.</li>
+                            <li>Built a replay harness that caught a field-name bug which was itself flipping decisions.</li>
+                            <li>Added an issuer-keyed enrichment cache (sha256 of the canonical input) that produced byte-identical inputs across three runs.</li>
+                        </ul>
+                        <div class="fthb-tl-why">&rarr; You can't fix what you can't observe or reproduce.</div>
+                        <div class="fthb-tl-honest">Honest framing: enrichment and scoring layers are now deterministic (replay-verified); source retrieval still varies run-to-run by design &mdash; which Chapter 2 addresses.</div>
+                    </div>
+                </div>
+
+                <!-- Chapter 2 -->
+                <div class="fthb-tl-item" data-aos="fade-up" data-aos-offset="10">
+                    <div class="fthb-tl-dot"></div>
+                    <div class="fthb-tl-content">
+                        <div class="fthb-tl-ch">Chapter 2</div>
+                        <div class="fthb-tl-title">Don't fight nondeterminism &mdash; bound it.</div>
+                        <p><strong>Problem:</strong> Perplexity returns a different set of sources every run; you can't force consistency.</p>
+                        <p>Classify every source by tier (primary regulator / secondary press / tertiary / excluded), then enforce evidence rules &mdash; critical pillars require a primary source, severe pillars require two <em>independent</em> publishers. Cross-finding deduplication prevents the same event from being double-counted. Doctrine files are hashed into every run for auditability; the loader fails loud rather than silently skipping a missing file.</p>
+                        <div class="fthb-tl-why">&rarr; If you can't control which sources arrive, control how they're judged.</div>
+                        <div class="fthb-tl-honest">Honest framing: 210 passing tests cover deterministic enforcement and regression protection. The test corpus is synthetic by necessity &mdash; recent live runs produced few or no scored negative findings.</div>
+                    </div>
+                </div>
+
+                <!-- Chapter 3 — HERO -->
+                <div class="fthb-tl-item fthb-tl-hero" data-aos="fade-up" data-aos-offset="10">
+                    <div class="fthb-tl-dot"></div>
+                    <div class="fthb-tl-content">
+                        <div class="fthb-tl-ch">Chapter 3</div>
+                        <div class="fthb-tl-title">The top-8 cap was silently dropping government sources.</div>
+                        <p><strong>Problem:</strong> Before sending sources to Gemini, the pipeline kept only the first 8 with no ordering. Because Perplexity's return order is random, an FTC, OSHA, or DOJ source could land at position&nbsp;9 or later and be silently discarded &mdash; Gemini never saw it, and nothing recorded that it had been dropped. A real audit gap.</p>
+                        <p><strong>Fix &mdash; two layers:</strong></p>
+                        <ul>
+                            <li>A regulatory safety net that records any primary/regulatory URL that didn't reach adjudication, so nothing disappears silently.</li>
+                            <li>Tier-aware ordering that sorts primary &rarr; secondary &rarr; tertiary before the cap, so regulators reach Gemini first.</li>
+                        </ul>
+                        <p><strong>Result:</strong> regulatory snippets reaching Gemini rose from 8 to 12; sources promoted from beyond the cap rose from 3 to 5.</p>
+                        <div class="fthb-tl-why">&rarr; A silently dropped regulator is worse than a wrong answer &mdash; at least a wrong answer is visible.</div>
+                    </div>
+                </div>
+
+                <!-- Chapter 4 -->
+                <div class="fthb-tl-item" data-aos="fade-up" data-aos-offset="10">
+                    <div class="fthb-tl-dot"></div>
+                    <div class="fthb-tl-content">
+                        <div class="fthb-tl-ch">Chapter 4</div>
+                        <div class="fthb-tl-title">One upstream change unblocks three rules.</div>
+                        <p><strong>Problem:</strong> Three validator rules &mdash; a date-provenance check, a per-source entity-mismatch warning, and an anti-bot source substitution &mdash; were all blocked on data the pipeline didn't emit.</p>
+                        <p>A single Gemini schema change added <code>event_date_source</code>, <code>source_named_entity</code>, and <code>primary_inaccessible</code>, unblocking all three at once.</p>
+                        <div class="fthb-tl-why">&rarr; Find the one upstream change that turns several blocked features into buildable ones.</div>
+                        <div class="fthb-tl-honest">Honest framing: the date-provenance demotion and per-source entity warning are live; the anti-bot substitution is wired and tested but dormant until the source bundle starts flagging blocked primaries.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CURRENT FRONTIER -->
+    <section class="fthb-section fthb-section-dark">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-offset="10">
+                Current Frontier
+                <span class="fthb-live-tag">In Progress</span>
+            </h2>
+            <div data-aos="fade-up" data-aos-offset="10">
+                <div class="fthb-frontier-card">
+                    <h3>Chapter 5 &mdash; Knowing when it's not a code problem.</h3>
+                    <p>The next batch is deliberately blocked on doctrine/policy input, not engineering:</p>
+                    <ul>
+                        <li>Parent/subsidiary attribution &mdash; the <code>source_named_entity</code> field is in place to drive the eventual rule, but the rule itself is a judgment call.</li>
+                        <li>Pattern-vs-incident distinction.</li>
+                        <li>Recency weighting.</li>
+                        <li>Pillar tiebreakers.</li>
+                        <li>A cleaner reason-code taxonomy.</li>
+                    </ul>
+                    <p style="margin-top:14px;margin-bottom:0;">
+                        Two known small open items: apply the Insufficient-Evidence database migration, and close a schema/prompt sync gap on <code>event_date_source</code>.
+                        <span class="fthb-open-tag">Open</span>
+                    </p>
+                    <div class="fthb-frontier-why">
+                        The hard part here isn't writing the code &mdash; it's deciding the policy the code should enforce. Shipping the boundary honestly beats faking completeness.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LESSONS LEARNED -->
+    <section class="fthb-section fthb-section-darker">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-offset="10">Lessons Learned</h2>
+            <div data-aos="fade-up" data-aos-offset="10">
+                <div class="fthb-lesson">
+                    <div class="fthb-lesson-num">1</div>
+                    <div class="fthb-lesson-body">
+                        Observe and reproduce before you optimize &mdash; most of the early wins were instrumentation, not features.
+                    </div>
+                </div>
+                <div class="fthb-lesson">
+                    <div class="fthb-lesson-num">2</div>
+                    <div class="fthb-lesson-body">
+                        When you can't remove nondeterminism, build a deterministic layer that bounds its blast radius.
+                    </div>
+                </div>
+                <div class="fthb-lesson">
+                    <div class="fthb-lesson-num">3</div>
+                    <div class="fthb-lesson-body">
+                        Fail loud. A silent-skip loader and a silently truncated source list were the two most dangerous bugs; both hid real data loss behind a green run.
+                    </div>
+                </div>
+                <div class="fthb-lesson">
+                    <div class="fthb-lesson-num">4</div>
+                    <div class="fthb-lesson-body">
+                        Recognize when a problem is a policy decision wearing an engineering costume &mdash; and stop, rather than guessing the doctrine.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <section class="fthb-cta">
+        <div class="container">
+            <p>Read the code, follow the commits, or explore the pipeline directly.</p>
+            <!--
+                UPDATE: replace the href value below with the actual GitHub repo URL when ready.
+                This is the only <a> tag in this file that needs a URL update.
+            -->
+            <a href="https://www.google.com"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="fthb-btn">
+                View Source on GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- SITE FOOTER -->
+    <section class="footer" id="footer">
+        <div style="padding:20px;text-align:center;">
+            &copy; 2026 All Rights Reserved.
+        </div>
+    </section>
+
+    <script src="./JS/jquery-3.6.0.js"></script>
+    <script src="./JS/popper.min.js"></script>
+    <script src="./JS/bootstrap.min.js"></script>
+    <script src="./JS/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.AOS) AOS.init({ once: true });
+        });
+    </script>
+
+</body>
+</html>
